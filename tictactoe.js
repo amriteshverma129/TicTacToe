@@ -52,20 +52,22 @@ class Tictactoe {
     }
     checkWinner = () => {
         if (this.checkPlayerStatus(this.arrayPlayer1)) {
-            this.viewService.clearBox();
-            this.viewService.clearHeading();
-            this.viewService.createButton('Player 1 has won');
+            this.displayMessage('Player1 has won')
+            return true
         }
         else if (this.checkPlayerStatus(this.arrayPlayer2)) {
-            this.viewService.clearBox();
-            this.viewService.clearHeading();
-            this.viewService.createButton('Player 2 has won')
+            this.displayMessage('Player2 has won')
+            return true
         }
         else if (this.checkTie()) {
-            this.viewService.clearBox();
-            this.viewService.clearHeading();
-            this.viewService.createButton('Its a tie')
+            this.displayMessage("It's a tie")
+            return true
         }
+    }
+    displayMessage = (message) => {
+        this.viewService.clearBox();
+        this.viewService.clearHeading();
+        this.viewService.createButton(message);
         document.querySelector('.btn')?.addEventListener('click', () => {
             this.resetGame();
         })
@@ -78,12 +80,12 @@ class Tictactoe {
             cell.addEventListener('click', () => {
                 this.isPlayer1 ? cell.innerHTML = this.viewService.circle : cell.innerHTML = this.viewService.cross;
                 this.isPlayer1 ? this.arrayPlayer1.push(index + 1) : this.arrayPlayer2.push(index + 1);
-                this.checkWinner();
-                this.changePlayer();
-                this.isPlayer1 ? this.viewService.setHeading('Player1') : this.viewService.setHeading('Player2');
+                if (!this.checkWinner()) {
+                    this.changePlayer();
+                    this.isPlayer1 ? this.viewService.setHeading('Player1') : this.viewService.setHeading('Player2');
+                }
             }, { once: true })
         })
-
     }
 }
 
